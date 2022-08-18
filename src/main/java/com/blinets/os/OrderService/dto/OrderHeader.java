@@ -55,6 +55,9 @@ public class OrderHeader extends BaseEntity {
     @Embedded
     private Address billToAddress;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     public OrderHeader(String customerName) {
         this.customerName = customerName;
     }

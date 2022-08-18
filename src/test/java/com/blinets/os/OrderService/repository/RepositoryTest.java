@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -25,7 +27,12 @@ public class RepositoryTest {
         OrderHeader orderHeader = new OrderHeader("Custom Name");
         OrderHeader save = repository.save(orderHeader);
         assertThat(save).isNotNull();
+        OrderHeader orderHeader1 = repository.findById(save.getId()).get();
+        assertThat(orderHeader1).isNotNull();
+        assertThat(orderHeader1.getCreatedDate()).isNotNull();
+        assertThat(orderHeader1.getLastModifiedDate()).isNotNull();
         repository.delete(save);
+
     }
 
 }
