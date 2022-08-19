@@ -3,6 +3,9 @@ package com.blinets.os.OrderService.repository;
 
 import com.blinets.os.OrderService.dto.OrderHeader;
 import com.blinets.os.OrderService.dto.OrderLine;
+import com.blinets.os.OrderService.dto.Product;
+import com.blinets.os.OrderService.dto.ProductStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -21,14 +24,28 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class RepositoryTest {
 
     @Autowired
-    OrderHeaderRepository repository;
+    OrderHeaderRepository orderHeaderRepository;
+
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    OrderLineRepository orderLineRepository;
+
+    Product product;
+
+    @BeforeEach
+    void setUp() {
+        Product excitingProduct = new Product(ProductStatus.NEW, "exciting product");
+        Product save = productRepository.saveAndFlush(excitingProduct);
+        product = save;
+    }
 
     @Test
     void repositoryTest() {
         OrderHeader orderHeader = new OrderHeader("Custom Name");
-        OrderHeader save = repository.save(orderHeader);
+        OrderHeader save = orderHeaderRepository.save(orderHeader);
         assertThat(save).isNotNull();
-        OrderHeader orderHeader1 = repository.findById(save.getId()).get();
+        OrderHeader orderHeader1 = orderHeaderRepository.findById(save.getId()).get();
         assertThat(orderHeader1).isNotNull();
         assertThat(orderHeader1.getCreatedDate()).isNotNull();
         assertThat(orderHeader1.getLastModifiedDate()).isNotNull();
@@ -44,15 +61,18 @@ public class RepositoryTest {
         orderLine1.setOrderHeader(orderHeader);
         orderLine2.setOrderHeader(orderHeader);
 
-        orderHeader.setOrderLines(Set.of(orderLine1, orderLine2));
-        OrderHeader orderHeaderSave = repository.save(orderHeader);
+        orderLine1.setProduct(product);
 
-        Optional<OrderHeader> orderHeaderOptional = repository.findById(orderHeaderSave.getId());
+        orderHeader.setOrderLines(Set.of(orderLine1, orderLine2));
+        OrderHeader orderHeaderSave = orderHeaderRepository.save(orderHeader);
+
+        Optional<OrderHeader> orderHeaderOptional = orderHeaderRepository.findById(orderHeaderSave.getId());
         assertThat(orderHeaderOptional.isPresent()).isTrue();
         OrderHeader orderHeaderById = orderHeaderOptional.get();
         assertThat(orderHeaderById.getCustomerName()).isNotNull();
         assertThat(orderHeaderById.getOrderLines().size()).isGreaterThan(0);
 
     }
+
 
 }
