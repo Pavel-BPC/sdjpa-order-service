@@ -1,14 +1,16 @@
 package com.blinets.os.OrderService.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product extends BaseEntity {
@@ -17,9 +19,20 @@ public class Product extends BaseEntity {
 
     private String description;
 
+    public Product(ProductStatus productStatus, String description) {
+        this.productStatus = productStatus;
+        this.description = description;
+    }
+
     public Product(ProductStatus productStatus) {
         this.productStatus = productStatus;
     }
+
+    @ManyToMany
+    @JoinTable(name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> category;
 
     @Override
     public boolean equals(Object o) {

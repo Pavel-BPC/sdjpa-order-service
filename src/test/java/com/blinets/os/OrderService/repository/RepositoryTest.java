@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -30,6 +29,8 @@ public class RepositoryTest {
     ProductRepository productRepository;
     @Autowired
     OrderLineRepository orderLineRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     Product product;
 
@@ -63,7 +64,8 @@ public class RepositoryTest {
 
         orderLine1.setProduct(product);
 
-        orderHeader.setOrderLines(Set.of(orderLine1, orderLine2));
+        orderHeader.addOrderLines(orderLine1);
+        orderHeader.addOrderLines(orderLine2);
         OrderHeader orderHeaderSave = orderHeaderRepository.save(orderHeader);
 
         Optional<OrderHeader> orderHeaderOptional = orderHeaderRepository.findById(orderHeaderSave.getId());
@@ -74,5 +76,11 @@ public class RepositoryTest {
 
     }
 
+    @Test
+    void productCategoryTest() {
+        Product product1 = productRepository.findProductByDescription("PRODUCT1");
+        assertThat(product1).isNotNull();
+        assertThat(product1.getCategory()).isNotNull();
 
+    }
 }

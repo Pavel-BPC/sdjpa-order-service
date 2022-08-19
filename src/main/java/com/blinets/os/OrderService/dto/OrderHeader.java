@@ -6,11 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-//@ToString
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -61,8 +61,15 @@ public class OrderHeader extends BaseEntity {
     private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
-//    @ToString.Exclude
     private Set<OrderLine> orderLines;
+
+    public void addOrderLines(OrderLine orderLine) {
+        if (orderLines == null) {
+            orderLines = new HashSet<>();
+        }
+        orderLines.add(orderLine);
+        setOrderLines(orderLines);
+    }
 
     public OrderHeader(String customerName) {
         this.customerName = customerName;
