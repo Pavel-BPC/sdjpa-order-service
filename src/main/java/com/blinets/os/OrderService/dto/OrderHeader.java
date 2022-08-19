@@ -1,14 +1,16 @@
 package com.blinets.os.OrderService.dto;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
-@ToString
+//@ToString
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -58,6 +60,10 @@ public class OrderHeader extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
+//    @ToString.Exclude
+    private Set<OrderLine> orderLines;
+
     public OrderHeader(String customerName) {
         this.customerName = customerName;
     }
@@ -67,12 +73,26 @@ public class OrderHeader extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
+
         OrderHeader that = (OrderHeader) o;
-        return Objects.equals(customerName, that.customerName) && Objects.equals(shippingAddress, that.shippingAddress) && Objects.equals(billToAddress, that.billToAddress);
+
+        if (customerName != null ? !customerName.equals(that.customerName) : that.customerName != null) return false;
+        if (shippingAddress != null ? !shippingAddress.equals(that.shippingAddress) : that.shippingAddress != null)
+            return false;
+        if (billToAddress != null ? !billToAddress.equals(that.billToAddress) : that.billToAddress != null)
+            return false;
+        if (orderStatus != that.orderStatus) return false;
+        return orderLines != null ? orderLines.equals(that.orderLines) : that.orderLines == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), customerName, shippingAddress, billToAddress);
+        int result = super.hashCode();
+        result = 31 * result + (customerName != null ? customerName.hashCode() : 0);
+        result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
+        result = 31 * result + (billToAddress != null ? billToAddress.hashCode() : 0);
+        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
+        result = 31 * result + (orderLines != null ? orderLines.hashCode() : 0);
+        return result;
     }
 }
