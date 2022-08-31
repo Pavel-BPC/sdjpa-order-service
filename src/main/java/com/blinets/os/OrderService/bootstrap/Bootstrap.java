@@ -22,41 +22,9 @@ public class Bootstrap implements CommandLineRunner {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    private OrderHeaderRepository orderHeaderRepository;
-
-    @Autowired
-    private OrderLineRepository orderLineRepository;
-
-
     @Override
     public void run(String... args) throws Exception {
         bootstrapService.readOrderData();
-
-
-        OrderHeader orderHeader = new OrderHeader();
-        OrderLine orderLine1 = new OrderLine(1);
-        OrderLine orderLine2 = orderLineRepository.save(orderLine1);
-        System.out.println("OrderLine version : " + orderLine2.getVersion());
-
-        orderLine2.setQuantityOrder(324);
-        orderLine2.setOrderHeader(orderHeader);
-        OrderLine orderLine3 = orderLineRepository.save(orderLine2);
-        System.out.println("OrderLine version : " + orderLine3.getVersion());
-
-        orderHeader.addOrderLines(orderLine3);
-        OrderHeader orderHeaderSave = orderHeaderRepository.save(orderHeader);
-        System.out.println("OrderHeader version : " + orderHeaderSave.getVersion());
-
-
-        OrderApproval orderApproval = new OrderApproval();
-        orderApproval.setApprovalBy("Nikolas Cage");
-        orderHeaderSave.setOrderApproval(orderApproval);
-        OrderHeader orderHeader1 = orderHeaderRepository.save(orderHeaderSave);
-        System.out.println("OrderHeader version : " + orderHeader1.getVersion());
-
-        orderLineRepository.deleteById(orderLine3.getId());
-        orderHeaderRepository.deleteById(orderHeader1.getId());
 
         customerVersion();
     }

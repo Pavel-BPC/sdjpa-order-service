@@ -2,11 +2,13 @@ package com.blinets.os.OrderService.repository;
 
 
 import com.blinets.os.OrderService.dto.*;
+import com.blinets.os.OrderService.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Objects;
@@ -18,6 +20,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ComponentScan(basePackageClasses = {ProductService.class})
 public class RepositoryTest {
 
     @Autowired
@@ -31,6 +34,9 @@ public class RepositoryTest {
     CategoryRepository categoryRepository;
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    ProductService productService;
 
     Product product;
 
@@ -101,5 +107,17 @@ public class RepositoryTest {
         assertThat(byId.isPresent()).isTrue();
         Customer customer1 = byId.get();
         assertThat(customer1.getOrderHeader()).isNotNull();
+    }
+
+    @Test
+    void addAndUpdateProduct() {
+        Product product1 = new Product();
+        product1.setDescription("dec");
+        product1.setProductStatus(ProductStatus.NEW);
+
+        Product product2 = productService.savaProduct(product1);
+        Product product3 = productService.updateQOH(product2, 25);
+        System.out.println(product3.getQuantityOnHand());
+
     }
 }
