@@ -73,6 +73,9 @@ public class OrderHeader extends BaseEntity {
     @Fetch(FetchMode.SELECT)
     private OrderApproval orderApproval;
 
+    @Version
+    private Integer version;
+
     public void addOrderLines(OrderLine orderLine) {
         if (orderLines == null) {
             orderLines = new HashSet<>();

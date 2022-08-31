@@ -1,10 +1,7 @@
 package com.blinets.os.OrderService.dto;
 
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +26,8 @@ public class Customer extends BaseEntity {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
     private Set<OrderHeader> orderHeader;
 
+    @Version
+    private Integer version;
 
     public Customer(String customerName, String phone, String email) {
         this.customerName = customerName;

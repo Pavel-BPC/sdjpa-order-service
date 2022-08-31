@@ -2,6 +2,7 @@ package com.blinets.os.OrderService.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -27,6 +28,8 @@ public class OrderLine extends BaseEntity {
     @ManyToOne
     private Product product;
 
+    @Version
+    private Integer version;
     public OrderLine(Integer quantityOrder, Product product) {
         this.quantityOrder = quantityOrder;
         this.product = product;
