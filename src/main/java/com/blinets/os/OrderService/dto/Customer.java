@@ -5,7 +5,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import java.util.HashSet;
@@ -31,6 +34,13 @@ public class Customer extends BaseEntity {
         this.customerName = customerName;
         this.phone = phone;
         this.email = email;
+    }
+
+    public Customer(String customerName, String phone, String email, Address address) {
+        this.customerName = customerName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
     }
 
     public void addOrderHeader(OrderHeader order) {

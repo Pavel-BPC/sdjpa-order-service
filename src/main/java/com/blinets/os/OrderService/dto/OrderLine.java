@@ -27,6 +27,11 @@ public class OrderLine extends BaseEntity {
     @ManyToOne
     private Product product;
 
+    public OrderLine(Integer quantityOrder, Product product) {
+        this.quantityOrder = quantityOrder;
+        this.product = product;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

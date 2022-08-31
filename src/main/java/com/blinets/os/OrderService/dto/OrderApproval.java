@@ -1,6 +1,8 @@
 package com.blinets.os.OrderService.dto;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OrderApproval extends BaseEntity{
+public class OrderApproval extends BaseEntity {
     private String approvalBy;
+
+    @OneToOne
+    @JoinColumn(name = "order_header_id")
+    private OrderHeader orderHeader;
 
     @Override
     public boolean equals(Object o) {

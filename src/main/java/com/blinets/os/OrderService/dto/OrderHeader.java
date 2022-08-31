@@ -60,13 +60,13 @@ public class OrderHeader extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "orderHeader", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<OrderLine> orderLines;
 
     @ManyToOne
     private Customer customer;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "orderHeader")
     private OrderApproval orderApproval;
 
     public void addOrderLines(OrderLine orderLine) {
@@ -77,6 +77,13 @@ public class OrderHeader extends BaseEntity {
         setOrderLines(orderLines);
     }
 
+    public OrderHeader(Address shippingAddress, Address billToAddress, OrderStatus orderStatus, Customer customer, OrderApproval orderApproval) {
+        this.shippingAddress = shippingAddress;
+        this.billToAddress = billToAddress;
+        this.orderStatus = orderStatus;
+        this.customer = customer;
+        this.orderApproval = orderApproval;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -90,5 +97,10 @@ public class OrderHeader extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), shippingAddress, billToAddress, orderStatus, orderLines, customer);
+    }
+
+    public void setOrderApproval(OrderApproval orderApproval) {
+        this.orderApproval = orderApproval;
+        orderApproval.setOrderHeader(this);
     }
 }
