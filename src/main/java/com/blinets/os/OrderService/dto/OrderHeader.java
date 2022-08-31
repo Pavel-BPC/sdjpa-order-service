@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -50,7 +51,6 @@ import java.util.Set;
 })
 public class OrderHeader extends BaseEntity {
 
-    private String customerName;
 
     @Embedded
     private Address shippingAddress;
@@ -63,6 +63,9 @@ public class OrderHeader extends BaseEntity {
     @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
     private Set<OrderLine> orderLines;
 
+    @ManyToOne
+    private Customer customer;
+
     public void addOrderLines(OrderLine orderLine) {
         if (orderLines == null) {
             orderLines = new HashSet<>();
@@ -71,35 +74,18 @@ public class OrderHeader extends BaseEntity {
         setOrderLines(orderLines);
     }
 
-    public OrderHeader(String customerName) {
-        this.customerName = customerName;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-
         OrderHeader that = (OrderHeader) o;
-
-        if (customerName != null ? !customerName.equals(that.customerName) : that.customerName != null) return false;
-        if (shippingAddress != null ? !shippingAddress.equals(that.shippingAddress) : that.shippingAddress != null)
-            return false;
-        if (billToAddress != null ? !billToAddress.equals(that.billToAddress) : that.billToAddress != null)
-            return false;
-        if (orderStatus != that.orderStatus) return false;
-        return orderLines != null ? orderLines.equals(that.orderLines) : that.orderLines == null;
+        return Objects.equals(shippingAddress, that.shippingAddress) && Objects.equals(billToAddress, that.billToAddress) && orderStatus == that.orderStatus && Objects.equals(orderLines, that.orderLines) && Objects.equals(customer, that.customer);
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (customerName != null ? customerName.hashCode() : 0);
-        result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
-        result = 31 * result + (billToAddress != null ? billToAddress.hashCode() : 0);
-        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
-        result = 31 * result + (orderLines != null ? orderLines.hashCode() : 0);
-        return result;
+        return Objects.hash(super.hashCode(), shippingAddress, billToAddress, orderStatus, orderLines, customer);
     }
 }

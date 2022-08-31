@@ -1,10 +1,7 @@
 package com.blinets.os.OrderService.repository;
 
 
-import com.blinets.os.OrderService.dto.OrderHeader;
-import com.blinets.os.OrderService.dto.OrderLine;
-import com.blinets.os.OrderService.dto.Product;
-import com.blinets.os.OrderService.dto.ProductStatus;
+import com.blinets.os.OrderService.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,8 @@ public class RepositoryTest {
     OrderLineRepository orderLineRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    CustomerRepository customerRepository;
 
     Product product;
 
@@ -43,7 +42,7 @@ public class RepositoryTest {
 
     @Test
     void repositoryTest() {
-        OrderHeader orderHeader = new OrderHeader("Custom Name");
+        OrderHeader orderHeader = new OrderHeader();
         OrderHeader save = orderHeaderRepository.save(orderHeader);
         assertThat(save).isNotNull();
         OrderHeader orderHeader1 = orderHeaderRepository.findById(save.getId()).get();
@@ -55,7 +54,7 @@ public class RepositoryTest {
 
     @Test
     void orderLineTest() {
-        OrderHeader orderHeader = new OrderHeader("Custom Name");
+        OrderHeader orderHeader = new OrderHeader();
         OrderLine orderLine1 = new OrderLine(1);
         OrderLine orderLine2 = new OrderLine(2);
 
@@ -71,7 +70,6 @@ public class RepositoryTest {
         Optional<OrderHeader> orderHeaderOptional = orderHeaderRepository.findById(orderHeaderSave.getId());
         assertThat(orderHeaderOptional.isPresent()).isTrue();
         OrderHeader orderHeaderById = orderHeaderOptional.get();
-        assertThat(orderHeaderById.getCustomerName()).isNotNull();
         assertThat(orderHeaderById.getOrderLines().size()).isGreaterThan(0);
 
     }
@@ -82,5 +80,17 @@ public class RepositoryTest {
         assertThat(product1).isNotNull();
         assertThat(product1.getCategory()).isNotNull();
 
+    }
+
+    @Test
+    void customerTest() {
+        Customer customer = new Customer("cut name", "phone", "email");
+        OrderHeader orderHeader = new OrderHeader();
+        customer.addOrderHeader(orderHeader);
+        Customer save = customerRepository.save(customer);
+        Optional<Customer> byId = customerRepository.findById(save.getId());
+        assertThat(byId.isPresent()).isTrue();
+        Customer customer1 = byId.get();
+        assertThat(customer1.getOrderHeader()).isNotNull();
     }
 }
