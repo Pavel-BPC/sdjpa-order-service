@@ -75,6 +75,7 @@ public class OrderHeader extends BaseEntity {
         }
         orderLines.add(orderLine);
         setOrderLines(orderLines);
+        orderLine.setOrderHeader(this);
     }
 
     public OrderHeader(Address shippingAddress, Address billToAddress, OrderStatus orderStatus, Customer customer, OrderApproval orderApproval) {
