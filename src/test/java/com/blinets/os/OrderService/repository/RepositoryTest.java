@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -65,13 +66,21 @@ public class RepositoryTest {
 
         orderHeader.addOrderLines(orderLine1);
         orderHeader.addOrderLines(orderLine2);
+
+        OrderApproval orderApproval = new OrderApproval();
+        orderApproval.setApprovalBy("Nikolas Cage");
+        orderHeader.setOrderApproval(orderApproval);
+
         OrderHeader orderHeaderSave = orderHeaderRepository.save(orderHeader);
 
         Optional<OrderHeader> orderHeaderOptional = orderHeaderRepository.findById(orderHeaderSave.getId());
         assertThat(orderHeaderOptional.isPresent()).isTrue();
         OrderHeader orderHeaderById = orderHeaderOptional.get();
         assertThat(orderHeaderById.getOrderLines().size()).isGreaterThan(0);
-
+        assertThat(orderHeaderById.getOrderLines().stream()
+                .allMatch(orderLine -> Objects.nonNull(orderLine.getId()))).isTrue();
+        assertThat(orderHeaderById.getOrderApproval()).isNotNull();
+        assertThat(orderHeaderById.getOrderApproval().getId()).isNotNull();
     }
 
     @Test

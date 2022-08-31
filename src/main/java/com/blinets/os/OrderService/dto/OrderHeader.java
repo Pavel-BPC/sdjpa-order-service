@@ -66,6 +66,9 @@ public class OrderHeader extends BaseEntity {
     @ManyToOne
     private Customer customer;
 
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private OrderApproval orderApproval;
+
     public void addOrderLines(OrderLine orderLine) {
         if (orderLines == null) {
             orderLines = new HashSet<>();

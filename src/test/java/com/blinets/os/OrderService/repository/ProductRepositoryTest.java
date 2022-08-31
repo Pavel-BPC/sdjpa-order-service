@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("local")
 @DataJpaTest
@@ -20,7 +19,7 @@ class ProductRepositoryTest {
     ProductRepository productRepository;
 
     @Test
-    void productRepositoryTest(){
+    void productRepositoryTest() {
         Product product = new Product(ProductStatus.NEW);
         Product save = productRepository.save(product);
         Product product1 = productRepository.findById(save.getId()).get();
