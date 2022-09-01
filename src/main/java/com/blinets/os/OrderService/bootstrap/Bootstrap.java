@@ -30,7 +30,7 @@ public class Bootstrap implements CommandLineRunner {
     }
 
     private void customerVersion() {
-        Customer customer = new Customer("Name", "phone", "email");
+        Customer customer = new Customer("Name", "phone", "email@Mail.com");
         Customer save = customerRepository.save(customer);
         System.out.println("Customer version: " + save.getVersion());
 

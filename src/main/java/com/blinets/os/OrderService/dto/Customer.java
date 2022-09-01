@@ -2,6 +2,9 @@ package com.blinets.os.OrderService.dto;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +21,17 @@ import java.util.Set;
 @Getter
 @Setter
 public class Customer extends BaseEntity {
+    @Size(max = 50)
     private String customerName;
+
+    @Size(max = 20)
     private String phone;
+
+    @Email
+    @Size(max = 30)
     private String email;
+
+    @Valid
     @Embedded
     private Address address;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)

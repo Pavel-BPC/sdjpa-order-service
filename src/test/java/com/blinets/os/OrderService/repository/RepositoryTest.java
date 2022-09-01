@@ -3,6 +3,7 @@ package com.blinets.os.OrderService.repository;
 
 import com.blinets.os.OrderService.dto.*;
 import com.blinets.os.OrderService.services.ProductService;
+import com.blinets.os.OrderService.services.impl.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ComponentScan(basePackageClasses = {ProductService.class})
+@ComponentScan(basePackageClasses = {ProductServiceImpl.class})
 public class RepositoryTest {
 
     @Autowired
@@ -99,7 +100,19 @@ public class RepositoryTest {
 
     @Test
     void customerTest() {
-        Customer customer = new Customer("cut name", "phone", "email");
+        Customer customer = new Customer();
+        customer.setCustomerName("Name ");
+        customer.setEmail("mail@mail.com");
+        customer.setPhone("1234567890");
+
+        Address address = new Address();
+        address.setAddress("my address");
+        address.setCity("my city");
+        address.setZipCode("my zip code");
+        address.setState("state");
+
+        customer.setAddress(address);
+
         OrderHeader orderHeader = new OrderHeader();
         customer.addOrderHeader(orderHeader);
         Customer save = customerRepository.save(customer);
@@ -108,7 +121,6 @@ public class RepositoryTest {
         Customer customer1 = byId.get();
         assertThat(customer1.getOrderHeader()).isNotNull();
     }
-
     @Test
     void addAndUpdateProduct() {
         Product product1 = new Product();

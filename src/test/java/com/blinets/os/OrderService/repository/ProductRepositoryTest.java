@@ -2,10 +2,12 @@ package com.blinets.os.OrderService.repository;
 
 import com.blinets.os.OrderService.dto.Product;
 import com.blinets.os.OrderService.dto.ProductStatus;
+import com.blinets.os.OrderService.services.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -13,6 +15,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ComponentScan(basePackageClasses = {ProductServiceImpl.class})
 class ProductRepositoryTest {
 
     @Autowired
