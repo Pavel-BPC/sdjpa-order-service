@@ -1,0 +1,1 @@
+This project provides examples of: JPA Inheritance, JPA Mapped Super Class, Embedded Types, Java Enumerated Types, Hibernate Created Date, Hibernate Update Date, One to Many, Cascade on Persist, Many to One Unidirectional, Association Helper Methods, Many to Many,Cascade Delete, Spring Data JPA Transactions,Database Locking, Optimistic Locking, Pessimistic Locking, Validation. 
